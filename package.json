@@ -1,0 +1,26 @@
+{
+  "name": "term-suggest",
+  "version": "0.0.1",
+  "description": "Find closest matching suggestion for a word",
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "main": "main.js",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tessmore/term-suggest"
+  },
+  "keywords": [
+    "typo",
+    "match",
+    "closest",
+    "search",
+    "suggest"
+  ],
+  "author": "Fabiën Tesselaar",
+  "license": "MIT",
+  "homepage": "https://github.com/Tessmore/term-suggest"
+}
