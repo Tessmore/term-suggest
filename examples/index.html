@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Example term suggest</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- general styling -->
+  <style>
+      body {
+        font:1em Helvetica;
+        line-height: 146%;
+    }
+
+    .container {
+        margin:0 auto;
+        width:90%;
+        min-width:320px;
+        max-width:640px;
+    }
+
+    .inner {
+        float:left;
+        width:100%;
+        position:relative;
+
+        height:94vh;
+        min-height:600px;
+    }
+
+    h1 {
+        font-weight: normal;
+        padding:10px 1px;
+    }
+
+    form {
+        float:left;
+        width:100%;
+    }
+
+    form input {
+        width:98%;
+        padding:10px 7px;
+        border:1px solid #aaa;
+        font-size:1em;
+    }
+
+    form label {
+        font-weight: bold;
+    }
+
+    .description {
+        position:absolute;
+        float:left;
+        width:100%;
+
+        bottom:40px;
+
+        border-top:3px solid #eee;
+        padding-top:8px;
+
+        color:#999;
+        font-size:20px;
+        line-height: 28px;
+    }
+
+    .description p {
+        margin:0;
+    }
+    </style>
+
+  <!-- This plugin -->
+  <script src="../main.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="inner">
+    <h1>Term suggestion(s)</h1>
+
+    <form>
+        <label>Typo in git command</label>
+        <input
+            type="text"
+            onkeyup="displayTip(this.value)"
+            placeholder="eg. cone, puhs, pul, stauts"
+            autocomplete="off">
+
+        <div id="tip" style="display:none">
+          Did you mean:
+        </div>
+    </form>
+
+    <div class="description">
+      <p>Suggestions are different than autocompletion, it tries to find closest matching words. For autocompletion you want something that finds the longest shared "fuzzy" prefix.
+    </div>
+  </div>
+
+<script>
+  var tip = document.getElementById("tip");
+
+  var gitCommands = [
+    "push",
+    "pull",
+    "clone",
+    "status",
+    "help",
+    "merge"
+  ];
+
+  function displayTip(str) {
+      tip.style.display = "none";
+
+      if (str.length < 2) {
+          return false;
+      }
+
+      var suggestions = termSuggest.closest(str, gitCommands);
+
+      if (suggestions.length) {
+          var text = ('innerText' in tip) ? 'innerText' : 'textContent';
+          tip[text] = "Did you mean: " + suggestions;
+
+          tip.style.display = "block";
+      }
+  }
+</script>
+</div>
+</body>
+</html>

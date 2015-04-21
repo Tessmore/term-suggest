@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = {
+var termSuggest = {
     "threshold" : 3,
 
       // Return N closest suggestions, defaults to 1 element
@@ -12,7 +12,10 @@ module.exports = {
         var distance = this.distance;
 
         var tmp = terms.sort(function(a, b) {
-            return distance(str, a) - distance(str, b);
+            var distA = distance(str, a);
+            var distB = distance(str, b);
+
+            return distA - distB;
         });
 
         return N === 1 ? tmp[0] : tmp.slice(0, N);
@@ -35,35 +38,40 @@ module.exports = {
         return result;
     },
 
+    // Levensthein
+    // http://stackoverflow.com/a/18514751/951517
     "distance" : function(s1, s2) {
-        // Levensthein
-        // http://stackoverflow.com/a/18514751/951517
-        var s1_len = s1.length;
-        var s2_len = s2.length;
+        var row2 = [];
+
+        var s1_len = s1.length, s2_len = s2.length;
 
         if (s1_len && s2_len) {
-            var a, b, c, c2, row = new Array(s1_len);
+          var i1 = 0, i2 = 0, a, b, c, c2, row = row2;
 
-            for (var i=0; i < s1_len; i++) {
-                row[i] = i;
+          while (i1 < s1_len)
+            row[i1] = ++i1;
+
+          while (i2 < s2_len) {
+            c2 = s2.charCodeAt(i2);
+            a = i2;
+            ++i2;
+            b = i2;
+            for (i1 = 0; i1 < s1_len; ++i1) {
+              c = a + (s1.charCodeAt(i1) !== c2 ? 1 : 0);
+              a = row[i1];
+              b = b < a ? (b < c ? b + 1 : c) : (a < c ? a + 1 : c);
+              row[i1] = b;
             }
+          }
 
-            for (var j=0, a=j, b=j+1; j < s2_len; j++) {
-                c2 = s2.charCodeAt(j);
-
-                for (i=0; i < s1_len; i++) {
-                    c = a + (s1.charCodeAt(i) === c2 ? 0 : 1);
-                    a = row[i];
-                    b = b < a ? (b < c ? b + 1 : c) : (a < c ? a + 1 : c);
-
-                    row[i] = b;
-                }
-            }
-
-            return b;
+          return b;
         }
         else {
-            return s1_len + s2_len;
+          return s1_len + s2_len;
         }
     }
 };
+
+if (typeof module !== "undefined" && typeof exports !== "undefined") {
+    module.exports = termSuggest;
+}

@@ -1,6 +1,6 @@
 {
   "name": "term-suggest",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Find closest matching suggestion for a word",
   "devDependencies": {
     "mocha": "*"
